@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                .folium-map { position: absolute; top: 0; bottom: 0; left: 0; right: 0; }
+                #map_713a1182731ad40064616816b525c834 { width: 100%; height: 100%; }
+                .leaflet-container { font-size: 0.95rem; font-family: inherit; }
+                .map-legend { position: absolute; z-index: 10000; bottom: 20px; right: 20px; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); padding: 14px 18px; border-radius: 10px; box-shadow: 0 4px 24px rgba(0,0,0,0.12); border: 1px solid rgba(0,0,0,0.06); }
+                .map-legend h4 { margin: 0 0 10px 0; font-size: 0.85rem; font-weight: 600; color: #1a1a2e; }
+                .map-legend label { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 0.85rem; color: #4a5568; cursor: pointer; user-select: none; }
+                .map-legend label:hover { color: #1a1a2e; }
+                .map-legend .swatch { width: 20px; height: 4px; border-radius: 2px; flex-shrink: 0; }
+                .map-legend .swatch-dashed { background: repeating-linear-gradient(90deg, #dc2626, #dc2626 4px, transparent 4px, transparent 8px); }
+                .map-legend input[type="checkbox"] { cursor: pointer; }
+                .map-legend .state-section { max-height: 200px; overflow-y: auto; margin-top: 6px; }
+                .map-legend .state-section label { font-size: 0.78rem; margin: 3px 0; }
+                .map-legend .state-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 12px; }
+                .loading-screen { position: fixed; inset: 0; z-index: 99999; background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease; }
+                .loading-screen.hidden { opacity: 0; pointer-events: none; }
+                .loading-screen h2 { color: #f1f5f9; font-size: 1.4rem; font-weight: 600; margin: 0 0 8px 0; letter-spacing: -0.02em; }
+                .loading-screen p { color: #94a3b8; font-size: 0.9rem; margin: 0 0 24px 0; }
+                .loading-bar { width: 240px; height: 6px; background: rgba(255,255,255,0.12); border-radius: 3px; overflow: hidden; }
+                .loading-bar-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #06b6d4); border-radius: 3px; transition: width 0.3s ease; width: 0%; }
+                .loading-status { color: #64748b; font-size: 0.8rem; margin-top: 14px; }
+            </style>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css"/>
+</head>
+<body>
+    <div id="loading-screen" class="loading-screen">
+        <h2>Loading map…</h2>
+        <p>U.S.–Mexico border · Rail network by state</p>
+        <div class="loading-bar"><div id="loading-bar-fill" class="loading-bar-fill"></div></div>
+        <div id="loading-status" class="loading-status">Initializing…</div>
+    </div>
+    
+			 <div style="position:absolute;z-index:10000;left:16px;top:16px;right:16px;max-width:420px;background:rgba(255,255,255,0.96);backdrop-filter:blur(12px);padding:18px 22px;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.12);border:1px solid rgba(0,0,0,0.06);">
+			 <h2 style="margin:0 0 8px 0;font-size:1.15rem;font-weight:600;color:#1a1a2e;letter-spacing:-0.02em;">U.S.–Mexico Border</h2>
+			 <p style="margin:0 0 6px 0;font-size:0.9rem;color:#4a5568;line-height:1.5;">1,954-mile border from Pacific to Gulf. Dashed circle: circumference equals full border length, centered on the Texas Triangle.</p>
+			 <p style="margin:0;font-size:0.8rem;color:#718096;">Texas Triangle perimeter ≈ 670 mi · Border wraps around it ~2.9×</p>
+			 <p style="margin:8px 0 0 0;font-size:0.75rem;color:#94a3b8;">U.S. rail lines (green) by state · BTS North American Rail Network</p>
+			 </div>
+
+			 <div class="map-legend">
+			 <h4>Layers</h4>
+			 <label><input type="checkbox" id="legend-border" checked> <span class="swatch" style="background:#dc2626;"></span> U.S.–Mexico border</label>
+			 <label><input type="checkbox" id="legend-circle" checked> <span class="swatch swatch-dashed"></span> Border circle (1,954 mi)</label>
+			 <label><input type="checkbox" id="legend-triangle" checked> <span class="swatch" style="background:#2563eb;"></span> Texas Triangle</label>
+			 <label><input type="checkbox" id="legend-markers" checked> <span style="font-size:10px;">●</span> City markers</label>
+			 <h4 style="margin:14px 0 4px 0;font-size:0.8rem;">Rails by state</h4>
+			 <label><input type="checkbox" id="legend-rail-all" checked> <span class="swatch" style="background:#16a34a;"></span> All rails</label>
+			 <div id="rail-state-keys" class="state-section state-grid"><span style="font-size:0.75rem;color:#94a3b8;">Loading rails for all 50 states…</span></div>
+			 </div>
+			 
+    
+            <div class="folium-map" id="map_713a1182731ad40064616816b525c834" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_713a1182731ad40064616816b525c834 = L.map(
+                "map_713a1182731ad40064616816b525c834",
+                {
+                    center: [29.2, -107.0],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 5,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_04830b36ae8bf2a6dae5d45a942a1ba7 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> &copy; <a href='https://carto.com/attributions'>CARTO</a> · Rail: BTS",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_04830b36ae8bf2a6dae5d45a942a1ba7.addTo(map_713a1182731ad40064616816b525c834);
+
+            function setLoading(pct, status) {
+                var bar = document.getElementById("loading-bar-fill");
+                var txt = document.getElementById("loading-status");
+                if (bar) bar.style.width = pct + "%";
+                if (txt) txt.textContent = status;
+            }
+            function hideLoading() {
+                setLoading(100, "Ready");
+                var el = document.getElementById("loading-screen");
+                if (el) {
+                    el.classList.add("hidden");
+                    setTimeout(function() { el.style.display = "none"; }, 500);
+                }
+            }
+            // U.S. rail network (green) - BTS North American Rail Network, grouped by state
+            var railLayersByState = {};
+            var railBaseUrl = "https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/NTAD_North_American_Rail_Network_Lines/FeatureServer/0/query";
+            function fetchRailBatch(offset) {
+                var params = "where=COUNTRY%3D'US'&outFields=OBJECTID,STATEAB,STFIPS&outSR=4326&f=geojson&resultRecordCount=2000&resultOffset=" + offset;
+                return fetch(railBaseUrl + "?" + params).then(function(r) { return r.json(); });
+            }
+            function loadAllUSRail() {
+                setLoading(5, "Loading base map…");
+                var allFeatures = [];
+                var totalBatches = 120;
+                fetch(railBaseUrl + "?where=COUNTRY%3D%27US%27&returnCountOnly=true&f=json").then(function(r) { return r.json(); }).then(function(res) {
+                    if (res.count != null) totalBatches = Math.ceil(res.count / 2000) || 120;
+                }).catch(function() {}).then(function() {
+                    function nextBatch(offset) {
+                        var batchNum = Math.floor(offset / 2000) + 1;
+                        setLoading(5 + Math.min(85, (batchNum / totalBatches) * 85), "Loading rail data… batch " + batchNum + " of " + totalBatches + " (all 50 states)");
+                        return fetchRailBatch(offset).then(function(data) {
+                            if (data.error) throw new Error(data.error.message || "API error");
+                            if (data.features && data.features.length > 0) {
+                                allFeatures = allFeatures.concat(data.features);
+                                if (data.features.length >= 2000) return nextBatch(offset + 2000);
+                            }
+                            if (allFeatures.length === 0) {
+                                document.getElementById("rail-state-keys").innerHTML = '<span style="font-size:0.75rem;color:#94a3b8;">No rail data</span>';
+                                hideLoading();
+                                return;
+                            }
+                            setLoading(92, "Rendering rail lines by state…");
+                            var byState = {};
+                            var fipsToAbbr = {"01":"AL","02":"AK","04":"AZ","05":"AR","06":"CA","08":"CO","09":"CT","10":"DE","11":"DC","12":"FL","13":"GA","15":"HI","16":"ID","17":"IL","18":"IN","19":"IA","20":"KS","21":"KY","22":"LA","23":"ME","24":"MD","25":"MA","26":"MI","27":"MN","28":"MS","29":"MO","30":"MT","31":"NE","32":"NV","33":"NH","34":"NJ","35":"NM","36":"NY","37":"NC","38":"ND","39":"OH","40":"OK","41":"OR","42":"PA","44":"RI","45":"SC","46":"SD","47":"TN","48":"TX","49":"UT","50":"VT","51":"VA","53":"WA","54":"WV","55":"WI","56":"WY","72":"PR"};
+                            allFeatures.forEach(function(f) {
+                                var p = f.properties || {};
+                                var st = p.STATEAB || fipsToAbbr[p.STFIPS] || p.STFIPS || "??";
+                                if (!byState[st]) byState[st] = [];
+                                byState[st].push(f);
+                            });
+                            var stateOrder = ["CA","AZ","NM","TX","OK","CO","KS","NE","WY","MT","ND","SD","MN","IA","MO","AR","LA","MS","AL","TN","KY","IL","IN","OH","WV","VA","NC","SC","GA","FL","WI","MI","PA","NY","NJ","CT","MA","VT","NH","ME","RI","WA","OR","ID","UT","NV","AK","HI","DC","DE","MD","PR"];
+                            var states = stateOrder.filter(function(s){return byState[s];}).concat(Object.keys(byState).filter(function(s){return stateOrder.indexOf(s)<0;}).sort());
+                            document.getElementById("rail-state-keys").innerHTML = "";
+                            states.forEach(function(st) {
+                                var fc = { type: "FeatureCollection", features: byState[st] };
+                                var layer = L.geoJSON(fc, {
+                                    style: { color: "#16a34a", weight: 1.8, opacity: 0.8 },
+                                    interactive: false
+                                });
+                                railLayersByState[st] = layer;
+                                var lb = document.createElement("label");
+                                lb.innerHTML = '<input type="checkbox" class="rail-state-cb" data-state="' + st + '" checked> ' + st;
+                                document.getElementById("rail-state-keys").appendChild(lb);
+                                layer.addTo(map_713a1182731ad40064616816b525c834);
+                            });
+                            document.getElementById("rail-state-keys").querySelectorAll(".rail-state-cb").forEach(function(cb) {
+                                cb.addEventListener("change", function() {
+                                    var st = this.getAttribute("data-state");
+                                    if (railLayersByState[st]) {
+                                        if (this.checked) map_713a1182731ad40064616816b525c834.addLayer(railLayersByState[st]);
+                                        else map_713a1182731ad40064616816b525c834.removeLayer(railLayersByState[st]);
+                                    }
+                                    document.getElementById("legend-rail-all").checked = 
+                                        document.querySelectorAll(".rail-state-cb:checked").length === document.querySelectorAll(".rail-state-cb").length;
+                                });
+                            });
+                            hideLoading();
+                        });
+                    }
+                    nextBatch(0).catch(function() {
+                        document.getElementById("rail-state-keys").innerHTML = '<span style="font-size:0.75rem;color:#dc2626;">Failed to load rail data</span>';
+                        hideLoading();
+                    });
+                });
+            }
+            loadAllUSRail();
+        
+    
+            var polygon_7362e5cd0b166456a12cbaa36794d5ce = L.polygon(
+                [[29.7604, -95.3698], [32.7767, -96.797], [30.2672, -97.7431], [29.4241, -98.4936], [29.7604, -95.3698]],
+                {"bubblingMouseEvents": true, "color": "#2563eb", "dashArray": null, "fill": true, "fillColor": "#3b82f6", "fillOpacity": 0.2, "lineCap": "round", "lineJoin": "round", "opacity": 1, "smoothFactor": 1, "stroke": true, "weight": 3}
+            ).addTo(map_713a1182731ad40064616816b525c834);
+            polygon_7362e5cd0b166456a12cbaa36794d5ce.bindTooltip(
+                `<div style="font-family:inherit;">Texas Triangle (Houston–Dallas–Austin–San Antonio)</div>`,
+                { "sticky": true }
+            );
+        
+    
+            var marker_cluster_68cd9b24852e1da4c6041314121eec9b = L.markerClusterGroup(
+                {
+}
+            );
+        
+    
+            var marker_60985810a4ffe92c5ec04ceedda5b579 = L.marker(
+                [29.7604, -95.3698],
+                {
+}
+            ).addTo(marker_cluster_68cd9b24852e1da4c6041314121eec9b);
+        
+    
+            var icon_04b26d831228230ca3cbf984ae283428 = L.AwesomeMarkers.icon(
+                { "markerColor": "blue", "iconColor": "white", "icon": "info-sign", "prefix": "glyphicon", "extraClasses": "fa-rotate-0" }
+            );
+        
+    
+        var popup_57807dca5cf790c94c5294db803497ed = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_632f32b1ea454ea1e6f34e72028572ae = $(`<div id="html_632f32b1ea454ea1e6f34e72028572ae" style="width: 100.0%; height: 100.0%;">Houston</div>`)[0];
+                popup_57807dca5cf790c94c5294db803497ed.setContent(html_632f32b1ea454ea1e6f34e72028572ae);
+            
+        
+
+        marker_60985810a4ffe92c5ec04ceedda5b579.bindPopup(popup_57807dca5cf790c94c5294db803497ed)
+        ;
+
+        
+    
+    
+            marker_60985810a4ffe92c5ec04ceedda5b579.bindTooltip(
+                `<div>
+                     Houston
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_60985810a4ffe92c5ec04ceedda5b579.setIcon(icon_04b26d831228230ca3cbf984ae283428);
+            
+    
+            var marker_e8e9d18ffb5ef91da476c5765f38340b = L.marker(
+                [32.7767, -96.797],
+                {
+}
+            ).addTo(marker_cluster_68cd9b24852e1da4c6041314121eec9b);
+        
+    
+            var icon_f4f5b20c81e4063f665800f26cb0ccf5 = L.AwesomeMarkers.icon(
+                { "markerColor": "blue", "iconColor": "white", "icon": "info-sign", "prefix": "glyphicon", "extraClasses": "fa-rotate-0" }
+            );
+        
+    
+        var popup_086dff150607a4f2cdf015093b983381 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_e10e731319f33589bd8b156369df036e = $(`<div id="html_e10e731319f33589bd8b156369df036e" style="width: 100.0%; height: 100.0%;">Dallas</div>`)[0];
+                popup_086dff150607a4f2cdf015093b983381.setContent(html_e10e731319f33589bd8b156369df036e);
+            
+        
+
+        marker_e8e9d18ffb5ef91da476c5765f38340b.bindPopup(popup_086dff150607a4f2cdf015093b983381)
+        ;
+
+        
+    
+    
+            marker_e8e9d18ffb5ef91da476c5765f38340b.bindTooltip(
+                `<div>
+                     Dallas
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_e8e9d18ffb5ef91da476c5765f38340b.setIcon(icon_f4f5b20c81e4063f665800f26cb0ccf5);
+            
+    
+            var marker_35c9c2f7d0c5fa9566d715beebdd1479 = L.marker(
+                [30.2672, -97.7431],
+                {
+}
+            ).addTo(marker_cluster_68cd9b24852e1da4c6041314121eec9b);
+        
+    
+            var icon_22a1e98bc3cedb5f43b9f5dba35cf6ad = L.AwesomeMarkers.icon(
+                { "markerColor": "blue", "iconColor": "white", "icon": "info-sign", "prefix": "glyphicon", "extraClasses": "fa-rotate-0" }
+            );
+        
+    
+        var popup_5ea5af3e2a0fa7395c90b68eb85c7a6c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d81e34c93baa9c7286e628f8caf99442 = $(`<div id="html_d81e34c93baa9c7286e628f8caf99442" style="width: 100.0%; height: 100.0%;">Austin</div>`)[0];
+                popup_5ea5af3e2a0fa7395c90b68eb85c7a6c.setContent(html_d81e34c93baa9c7286e628f8caf99442);
+            
+        
+
+        marker_35c9c2f7d0c5fa9566d715beebdd1479.bindPopup(popup_5ea5af3e2a0fa7395c90b68eb85c7a6c)
+        ;
+
+        
+    
+    
+            marker_35c9c2f7d0c5fa9566d715beebdd1479.bindTooltip(
+                `<div>
+                     Austin
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_35c9c2f7d0c5fa9566d715beebdd1479.setIcon(icon_22a1e98bc3cedb5f43b9f5dba35cf6ad);
+            
+    
+            var marker_d5ab0bb6ba433752018f5b920ed5d501 = L.marker(
+                [29.4241, -98.4936],
+                {
+}
+            ).addTo(marker_cluster_68cd9b24852e1da4c6041314121eec9b);
+        
+    
+            var icon_1a1253df6bd785611d723df6e31c21bb = L.AwesomeMarkers.icon(
+                { "markerColor": "blue", "iconColor": "white", "icon": "info-sign", "prefix": "glyphicon", "extraClasses": "fa-rotate-0" }
+            );
+        
+    
+        var popup_3149d86b8b244123fe6b63ddd6f064f3 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ca2ffe89dedbf910d6302d7399b507be = $(`<div id="html_ca2ffe89dedbf910d6302d7399b507be" style="width: 100.0%; height: 100.0%;">San Antonio</div>`)[0];
+                popup_3149d86b8b244123fe6b63ddd6f064f3.setContent(html_ca2ffe89dedbf910d6302d7399b507be);
+            
+        
+
+        marker_d5ab0bb6ba433752018f5b920ed5d501.bindPopup(popup_3149d86b8b244123fe6b63ddd6f064f3)
+        ;
+
+        
+    
+    
+            marker_d5ab0bb6ba433752018f5b920ed5d501.bindTooltip(
+                `<div>
+                     San Antonio
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_d5ab0bb6ba433752018f5b920ed5d501.setIcon(icon_1a1253df6bd785611d723df6e31c21bb);
+            
+    
+            marker_cluster_68cd9b24852e1da4c6041314121eec9b.addTo(map_713a1182731ad40064616816b525c834);
+        
+    
+            // Full U.S.–Mexico border: Pacific to Gulf (1,954 mi), from border crossing waypoints
+            var westernBorderCoords = [  // Pacific → El Paso (CA, AZ, NM)
+                [32.5342, -117.1215],   // Border Field State Park (Pacific)
+                [32.5433, -117.0297], [32.5517, -116.9708], [32.5775, -116.625],  // San Ysidro, Otay, Tecate
+                [32.6790, -115.4983], [32.6853, -114.7117], [32.4867, -114.7822],   // Calexico, Andrade, San Luis
+                [31.8825, -112.8147], [31.4697, -111.5433], [31.3386, -110.9406],   // Lukeville, Sasabe, Nogales
+                [31.3367, -109.9472], [31.3347, -109.5536], [31.3528, -108.4922],   // Naco, Douglas, Antelope Wells
+                [31.7817, -107.6372], [31.8808, -106.7058], [31.7587, -106.4869]     // Columbus, Santa Teresa, El Paso
+            ];
+            var texasRioGrandeCoords = [  // El Paso → Gulf (Rio Grande)
+                [31.7587, -106.4869], [30.85, -105.85], [30.15, -105.2], [29.5607, -104.3716],
+                [29.18, -103.9], [29.15, -103.2], [29.25, -102.6], [29.32, -101.95],
+                [29.4470, -101.0516], [29.3627, -100.8968], [28.7091, -100.4995],
+                [27.6997917, -99.7455694], [27.5972333, -99.5369556], [27.5002556, -99.5026972],
+                [27.4994361, -99.507475], [27.4983944, -99.5162944], [26.5594667, -99.1670694],
+                [26.40385, -99.0191556], [26.3657889, -98.8024889], [26.2394722, -98.5650833],
+                [26.1165417, -98.3181972], [26.0951361, -98.2714917], [26.0669, -98.2052],
+                [26.0656556, -98.0758639], [26.0621556, -97.95], [26.0291389, -97.7388444],
+                [25.962444, -97.583361], [25.8985639, -97.4975722], [25.8920139, -97.5047833],
+                [25.88361, -97.47639]   // Brownsville (Gulf of Mexico)
+            ];
+            var fullBorderCoords = westernBorderCoords.slice(0, -1).concat(texasRioGrandeCoords);
+            var poly_line_de8fed17b90152d7f7737ea692f46817 = L.polyline(
+                fullBorderCoords,
+                {"bubblingMouseEvents": true, "color": "#dc2626", "lineCap": "round", "lineJoin": "round", "opacity": 0.95, "smoothFactor": 1, "stroke": true, "weight": 4}
+            ).addTo(map_713a1182731ad40064616816b525c834);
+            poly_line_de8fed17b90152d7f7737ea692f46817.bindTooltip(
+                `<div style="font-family:inherit;">U.S.–Mexico Border (1,954 mi) · Pacific to Gulf</div>`,
+                { "sticky": true }
+            );
+
+            // Circle: circumference = full U.S.–Mexico border length (1,954 mi), centered on Texas Triangle
+            var triangleCenter = [30.5571, -97.1509];
+            var borderLengthMiles = 1954;
+            var radiusMeters = (borderLengthMiles / (2 * Math.PI)) * 1609.344;
+            var borderCircle = L.circle(triangleCenter, {
+                radius: radiusMeters,
+                color: "#dc2626",
+                fillColor: "#ef4444",
+                fillOpacity: 0.06,
+                weight: 2.5,
+                opacity: 0.85,
+                dashArray: "8, 6"
+            }).addTo(map_713a1182731ad40064616816b525c834);
+            borderCircle.bindTooltip(
+                `<div style="font-family:inherit;">Circle circumference = 1,954 mi (full border length)<br>Wraps ~2.9× around Texas Triangle</div>`,
+                { "sticky": true }
+            );
+
+            // Fit map to show full border with padding
+            map_713a1182731ad40064616816b525c834.fitBounds(poly_line_de8fed17b90152d7f7737ea692f46817.getBounds(), { padding: [40, 40], maxZoom: 6 });
+
+            // Layer key checkboxes
+            document.getElementById("legend-border").addEventListener("change", function() {
+                if (this.checked) map_713a1182731ad40064616816b525c834.addLayer(poly_line_de8fed17b90152d7f7737ea692f46817);
+                else map_713a1182731ad40064616816b525c834.removeLayer(poly_line_de8fed17b90152d7f7737ea692f46817);
+            });
+            document.getElementById("legend-circle").addEventListener("change", function() {
+                if (this.checked) map_713a1182731ad40064616816b525c834.addLayer(borderCircle);
+                else map_713a1182731ad40064616816b525c834.removeLayer(borderCircle);
+            });
+            document.getElementById("legend-triangle").addEventListener("change", function() {
+                if (this.checked) map_713a1182731ad40064616816b525c834.addLayer(polygon_7362e5cd0b166456a12cbaa36794d5ce);
+                else map_713a1182731ad40064616816b525c834.removeLayer(polygon_7362e5cd0b166456a12cbaa36794d5ce);
+            });
+            document.getElementById("legend-rail-all").addEventListener("change", function() {
+                document.querySelectorAll(".rail-state-cb").forEach(function(cb) {
+                    cb.checked = document.getElementById("legend-rail-all").checked;
+                    var st = cb.getAttribute("data-state");
+                    if (railLayersByState[st]) {
+                        if (cb.checked) map_713a1182731ad40064616816b525c834.addLayer(railLayersByState[st]);
+                        else map_713a1182731ad40064616816b525c834.removeLayer(railLayersByState[st]);
+                    }
+                });
+            });
+            document.getElementById("legend-markers").addEventListener("change", function() {
+                if (this.checked) map_713a1182731ad40064616816b525c834.addLayer(marker_cluster_68cd9b24852e1da4c6041314121eec9b);
+                else map_713a1182731ad40064616816b525c834.removeLayer(marker_cluster_68cd9b24852e1da4c6041314121eec9b);
+            });
+
+        
+</script>
+</html>
